@@ -1,0 +1,10 @@
+flowchart TB
+  BR[Branches / Remote Sites] --> VPN[VPN Connectivity]
+  DC[Enterprise Data Center] --> ER[ExpressRoute]
+  VPN --> VHUB[Azure Virtual Hub]
+  ER --> VHUB
+  VHUB --> PROD[Production VNet]
+  VHUB --> NONPROD[Non-Production VNet]
+  VHUB --> SHARED[Shared Services VNet]
+  VHUB --> FW[Azure Firewall / Security]
+  SHARED --> DNS[Private DNS / Identity / Tooling]
