@@ -1,0 +1,43 @@
+name: Validate Reference IaC
+
+on:
+  push:
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/validate.yml'
+  pull_request:
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/validate.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory:
+          - terraform/aws
+          - terraform/azure
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+
+      - name: Terraform format
+        run: terraform fmt -check -recursive
+
+      - name: Terraform init
+        working-directory: ${{ matrix.directory }}
+        run: terraform init -backend=false -input=false
+
+      - name: Terraform validate
+        working-directory: ${{ matrix.directory }}
+        run: terraform validate
