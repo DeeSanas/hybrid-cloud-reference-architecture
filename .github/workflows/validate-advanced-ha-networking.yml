@@ -1,0 +1,44 @@
+name: Validate Advanced HA and Networking
+
+on:
+  push:
+    paths:
+      - "projects/dual-datacenter-ha-dr/**"
+      - "projects/aws-transit-gateway/**"
+      - "projects/azure-virtual-wan/**"
+      - ".github/workflows/validate-advanced-ha-networking.yml"
+  pull_request:
+    paths:
+      - "projects/dual-datacenter-ha-dr/**"
+      - "projects/aws-transit-gateway/**"
+      - "projects/azure-virtual-wan/**"
+
+jobs:
+  recovery-model:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate recovery tiers
+        run: python projects/dual-datacenter-ha-dr/scripts/check_recovery_targets.py projects/dual-datacenter-ha-dr/models/recovery-tiers.json
+
+  terraform:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory:
+          - projects/aws-transit-gateway/terraform
+          - projects/azure-virtual-wan/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+      - name: Terraform format
+        run: terraform -chdir=${{ matrix.directory }} fmt -check
+      - name: Terraform init
+        run: terraform -chdir=${{ matrix.directory }} init -backend=false
+      - name: Terraform validate
+        run: terraform -chdir=${{ matrix.directory }} validate
