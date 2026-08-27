@@ -1,0 +1,9 @@
+{
+  "cluster": "gpu-reference-pool",
+  "nodes": 4,
+  "gpus_per_node": 8,
+  "gpu_memory_gb": 80,
+  "schedulable_fraction": 0.75,
+  "maintenance_reserve_nodes": 1,
+  "average_gpus_per_workload": 2
+}
