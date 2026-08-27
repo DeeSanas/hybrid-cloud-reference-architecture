@@ -1,0 +1,69 @@
+{
+  "architecture": "zero-trust-cloud-reference",
+  "version": "1.0",
+  "controls": [
+    {
+      "id": "ZT-ID-01",
+      "domain": "identity",
+      "control": "Require strong authentication for privileged administrative access",
+      "enforcement": "identity-policy",
+      "owner": "identity-security",
+      "evidence": "authentication and privileged-access audit events",
+      "required": true
+    },
+    {
+      "id": "ZT-IAM-02",
+      "domain": "authorization",
+      "control": "Use role-based least privilege and separate privileged roles from standard user access",
+      "enforcement": "iam-rbac",
+      "owner": "platform-security",
+      "evidence": "role definitions, assignments and access reviews",
+      "required": true
+    },
+    {
+      "id": "ZT-NET-01",
+      "domain": "network",
+      "control": "Apply deny-by-default segmentation between unrelated production trust zones",
+      "enforcement": "network-policy",
+      "owner": "network-security",
+      "evidence": "policy configuration and denied-flow telemetry",
+      "required": true
+    },
+    {
+      "id": "ZT-WI-01",
+      "domain": "workload-identity",
+      "control": "Prefer short-lived workload identity over embedded static credentials",
+      "enforcement": "workload-identity",
+      "owner": "platform-engineering",
+      "evidence": "identity issuance and credential-rotation records",
+      "required": true
+    },
+    {
+      "id": "ZT-DATA-01",
+      "domain": "data",
+      "control": "Encrypt sensitive data in transit and at rest according to data classification",
+      "enforcement": "encryption-policy",
+      "owner": "data-security",
+      "evidence": "encryption configuration and key-management records",
+      "required": true
+    },
+    {
+      "id": "ZT-OBS-01",
+      "domain": "telemetry",
+      "control": "Centralize identity, network and workload security telemetry",
+      "enforcement": "logging-policy",
+      "owner": "security-operations",
+      "evidence": "central log ingestion and correlation queries",
+      "required": true
+    },
+    {
+      "id": "ZT-BCP-01",
+      "domain": "resilience",
+      "control": "Maintain and test emergency access for identity or policy-control-plane failure",
+      "enforcement": "operational-procedure",
+      "owner": "security-operations",
+      "evidence": "break-glass test record and access audit",
+      "required": true
+    }
+  ]
+}
