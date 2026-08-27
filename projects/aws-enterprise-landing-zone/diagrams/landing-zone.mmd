@@ -1,0 +1,22 @@
+flowchart TB
+  ID[Enterprise Identity Provider] --> ORG[AWS Organization]
+  ORG --> SEC[Security OU]
+  ORG --> INFRA[Infrastructure OU]
+  ORG --> WORK[Workloads OU]
+  ORG --> SBOX[Sandbox OU]
+  SEC --> LOG[Log Archive Account]
+  SEC --> TOOL[Security Tooling Account]
+  INFRA --> NET[Network Account]
+  INFRA --> SHARED[Shared Services Account]
+  WORK --> PROD[Production Accounts]
+  WORK --> NONPROD[Non-Production Accounts]
+  DC[On-prem / Private Cloud] --> HYB[Hybrid Edge]
+  NET --> TGW[Transit Gateway]
+  HYB --> TGW
+  TGW --> PROD
+  TGW --> NONPROD
+  TGW --> SHARED
+  PROD --> LOG
+  NONPROD --> LOG
+  SHARED --> LOG
+  TOOL --> LOG
