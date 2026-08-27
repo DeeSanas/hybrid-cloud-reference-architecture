@@ -1,0 +1,8 @@
+{
+  "tiers": [
+    {"name": "tier-0", "rto_minutes": 15, "rpo_minutes": 5, "pattern": "active-active-or-ha"},
+    {"name": "tier-1", "rto_minutes": 60, "rpo_minutes": 15, "pattern": "active-standby-or-active-active"},
+    {"name": "tier-2", "rto_minutes": 240, "rpo_minutes": 60, "pattern": "warm-standby"},
+    {"name": "tier-3", "rto_minutes": 1440, "rpo_minutes": 1440, "pattern": "restore-from-backup"}
+  ]
+}
