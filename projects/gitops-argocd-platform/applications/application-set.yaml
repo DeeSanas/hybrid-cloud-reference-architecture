@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: platform-environments
+  namespace: argocd
+spec:
+  generators:
+    - list:
+        elements:
+          - environment: dev
+            namespace: platform-dev
+          - environment: prod
+            namespace: platform-prod
+  template:
+    metadata:
+      name: 'platform-{{environment}}'
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/DeeSanas/hybrid-cloud-reference-architecture.git
+        targetRevision: main
+        path: projects/gitops-argocd-platform/bootstrap
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{namespace}}'
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
