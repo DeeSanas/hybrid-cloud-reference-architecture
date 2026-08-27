@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: platform-system
+  labels:
+    app.kubernetes.io/part-of: platform-gitops
+    environment: shared
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: platform-system-quota
+  namespace: platform-system
+spec:
+  hard:
+    requests.cpu: "4"
+    requests.memory: 8Gi
+    limits.cpu: "8"
+    limits.memory: 16Gi
