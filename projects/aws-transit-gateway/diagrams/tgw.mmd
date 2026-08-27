@@ -1,0 +1,9 @@
+flowchart TB
+  ONP[On-Prem / Data Center] --> DXVPN[Direct Connect / VPN]
+  DXVPN --> TGW[AWS Transit Gateway]
+  TGW --> PROD[Production VPC]
+  TGW --> NONPROD[Non-Production VPC]
+  TGW --> SHARED[Shared Services VPC]
+  TGW --> INSPECT[Inspection / Security VPC]
+  SHARED --> DNS[DNS / Directory / Tooling]
+  INSPECT --> FW[Firewall / Security Controls]
