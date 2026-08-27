@@ -1,0 +1,64 @@
+name: Validate Cloud Platform Expansion
+
+on:
+  push:
+    paths:
+      - 'projects/aws-enterprise-landing-zone/**'
+      - 'projects/azure-enterprise-landing-zone/**'
+      - 'projects/gcp-network-foundation/**'
+      - 'projects/gitops-argocd-platform/**'
+      - '.github/workflows/validate-cloud-platform-expansion.yml'
+  pull_request:
+    paths:
+      - 'projects/aws-enterprise-landing-zone/**'
+      - 'projects/azure-enterprise-landing-zone/**'
+      - 'projects/gcp-network-foundation/**'
+      - 'projects/gitops-argocd-platform/**'
+
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - projects/aws-enterprise-landing-zone/terraform
+          - projects/azure-enterprise-landing-zone/terraform
+          - projects/gcp-network-foundation/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+      - name: Terraform format
+        run: terraform fmt -check -recursive "${{ matrix.project }}"
+      - name: Terraform init
+        working-directory: ${{ matrix.project }}
+        run: terraform init -backend=false -input=false
+      - name: Terraform validate
+        working-directory: ${{ matrix.project }}
+        run: terraform validate
+
+  gitops-yaml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install YAML parser
+        run: python -m pip install pyyaml
+      - name: Parse GitOps manifests
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          root = Path('projects/gitops-argocd-platform')
+          files = sorted(root.rglob('*.yaml')) + sorted(root.rglob('*.yml'))
+          assert files, 'No YAML manifests found'
+          for path in files:
+              with path.open() as handle:
+                  docs = list(yaml.safe_load_all(handle))
+              assert any(doc for doc in docs), f'{path} contains no YAML documents'
+              print(f'validated {path}')
+          PY
