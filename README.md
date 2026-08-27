@@ -99,9 +99,25 @@ The editable Mermaid source is maintained in [`diagrams/reference-architecture.m
 ├── terraform/
 │   ├── aws/
 │   └── azure/
+├── projects/
+│   ├── kubernetes-production-platform/
+│   ├── zero-trust-cloud-architecture/
+│   └── gpu-kubernetes-platform/
 └── .github/workflows/
-    └── validate.yml
+    ├── validate.yml
+    └── validate-platform-projects.yml
 ```
+
+## Platform reference projects
+
+### [Kubernetes Production Platform](projects/kubernetes-production-platform)
+Highly available Kubernetes platform architecture covering control-plane resilience, dedicated worker pools, default-deny networking, resource governance, storage integration, observability, backup/restore and failure validation. Includes a machine-validated Kubernetes baseline.
+
+### [Zero Trust Cloud Architecture](projects/zero-trust-cloud-architecture)
+Identity-first hybrid-cloud security model covering privileged access, workload identity, segmentation, data protection, telemetry and emergency access. Includes a machine-readable guardrail set and validation script.
+
+### [Enterprise GPU Infrastructure](projects/gpu-kubernetes-platform)
+GPU-backed Kubernetes platform design covering dedicated accelerator pools, scheduling, capacity headroom, storage/network considerations, workload placement and accelerator-aware operations. Includes a deterministic capacity calculator and validated workload example.
 
 ## Implementation path
 
@@ -138,8 +154,10 @@ The editable Mermaid source is maintained in [`diagrams/reference-architecture.m
 - [x] Security / HA / DR decision framework
 - [x] Starter AWS and Azure Terraform examples
 - [x] CI validation workflow
+- [x] Kubernetes production-platform reference project
+- [x] Zero Trust guardrail reference project
+- [x] GPU infrastructure and capacity-planning reference project
 - [ ] Add GCP landing-zone example
-- [ ] Add automated policy/security checks
 - [ ] Add failure-test scenarios and sample validation evidence
 
 ## License
