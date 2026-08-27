@@ -1,0 +1,40 @@
+flowchart TB
+    U[Users / Operators / CI-CD] --> LB[Redundant Ingress and API Load Balancing]
+
+    subgraph CP[Highly Available Control Plane]
+      C1[Control Plane 1]
+      C2[Control Plane 2]
+      C3[Control Plane 3]
+      ETCD[(etcd quorum)]
+      C1 --- ETCD
+      C2 --- ETCD
+      C3 --- ETCD
+    end
+
+    LB --> CP
+
+    subgraph WORKERS[Worker Pools]
+      P[Platform Pool\nIngress / Observability]
+      G[General Application Pool]
+      S[Specialized Pool\nGPU / High Memory]
+    end
+
+    CP --> WORKERS
+
+    NET[CNI + NetworkPolicy] --- WORKERS
+    ID[OIDC / Enterprise Identity + RBAC] --> CP
+    SEC[Secrets / PKI / Policy] --- WORKERS
+    CSI[CSI Persistent Storage] --- WORKERS
+    OBS[Metrics / Logs / Traces / Audit] --- WORKERS
+    BAK[Backup / Restore / DR] --- CP
+    BAK --- CSI
+
+    subgraph EXT[Enterprise Shared Services]
+      DNS[DNS / NTP]
+      REG[Image Registry]
+      GIT[Git / GitOps]
+      SIEM[SIEM / Monitoring]
+    end
+
+    WORKERS --- EXT
+    OBS --> SIEM
