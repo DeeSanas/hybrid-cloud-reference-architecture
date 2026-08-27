@@ -1,0 +1,21 @@
+flowchart TB
+  ORG[Google Cloud Organization] --> PLATFORM[Platform Folder]
+  ORG --> PROD[Production Folder]
+  ORG --> NONPROD[Non-Production Folder]
+  ORG --> SBOX[Sandbox Folder]
+  PLATFORM --> HOST[Shared VPC Host Project]
+  PLATFORM --> SEC[Security Project]
+  PLATFORM --> OBS[Logging / Monitoring Project]
+  PROD --> APP1[Production Service Projects]
+  NONPROD --> APP2[Development Service Projects]
+  HOST --> VPC[Shared VPC]
+  VPC --> SUB1[Production Subnets]
+  VPC --> SUB2[Non-Production Subnets]
+  APP1 --> SUB1
+  APP2 --> SUB2
+  DC[On-prem / Private Cloud] --> HYBRID[Cloud VPN / Interconnect]
+  HYBRID --> ROUTER[Cloud Router / BGP]
+  ROUTER --> VPC
+  APP1 --> OBS
+  APP2 --> OBS
+  SEC --> OBS
