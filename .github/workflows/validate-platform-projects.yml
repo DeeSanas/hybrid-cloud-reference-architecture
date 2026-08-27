@@ -1,0 +1,43 @@
+name: Validate Platform Reference Projects
+
+on:
+  push:
+    paths:
+      - 'projects/kubernetes-production-platform/**'
+      - 'projects/zero-trust-cloud-architecture/**'
+      - 'projects/gpu-kubernetes-platform/**'
+      - '.github/workflows/validate-platform-projects.yml'
+  pull_request:
+    paths:
+      - 'projects/kubernetes-production-platform/**'
+      - 'projects/zero-trust-cloud-architecture/**'
+      - 'projects/gpu-kubernetes-platform/**'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Validate Kubernetes baseline
+        run: |
+          python projects/kubernetes-production-platform/scripts/validate.py \
+            projects/kubernetes-production-platform/manifests/base/platform.json
+
+      - name: Validate Zero Trust guardrails
+        run: |
+          python projects/zero-trust-cloud-architecture/scripts/validate_guardrails.py \
+            projects/zero-trust-cloud-architecture/policies/guardrails.json
+
+      - name: Validate GPU capacity model
+        run: |
+          python projects/gpu-kubernetes-platform/scripts/capacity.py \
+            projects/gpu-kubernetes-platform/models/capacity.json
+
+      - name: Validate GPU workload example
+        run: |
+          python projects/gpu-kubernetes-platform/scripts/validate_workload.py \
+            projects/gpu-kubernetes-platform/manifests/gpu-workload.json
