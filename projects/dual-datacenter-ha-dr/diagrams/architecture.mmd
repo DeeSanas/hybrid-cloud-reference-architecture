@@ -1,0 +1,34 @@
+flowchart LR
+  U[Users / Channels] --> GSLB[Global Traffic / DNS / GSLB]
+  GSLB --> DC1
+  GSLB --> DC2
+
+  subgraph DC1[Data Center A]
+    AAPP[Application Cluster]
+    ADB[(Database)]
+    ASTG[(Storage)]
+    ANET[Redundant Network/Security]
+    AAPP --- ADB
+    ADB --- ASTG
+    AAPP --- ANET
+  end
+
+  subgraph DC2[Data Center B]
+    BAPP[Application Cluster]
+    BDB[(Database)]
+    BSTG[(Storage)]
+    BNET[Redundant Network/Security]
+    BAPP --- BDB
+    BDB --- BSTG
+    BAPP --- BNET
+  end
+
+  ADB <--> |Replication| BDB
+  ASTG <--> |Replication where required| BSTG
+  ANET <--> |DCI / Routed Interconnect| BNET
+  ID[Identity / DNS / PKI] --- DC1
+  ID --- DC2
+  OBS[Monitoring / Logging / SIEM] --- DC1
+  OBS --- DC2
+  BAK[Independent Backup / Immutable Copy] --- DC1
+  BAK --- DC2
