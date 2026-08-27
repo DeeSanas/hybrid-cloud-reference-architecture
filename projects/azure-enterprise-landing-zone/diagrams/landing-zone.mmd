@@ -1,0 +1,19 @@
+flowchart TB
+  ID[Microsoft Entra ID / Enterprise Identity] --> MG[Management Group Hierarchy]
+  MG --> PLATFORM[Platform]
+  MG --> LANDING[Landing Zones]
+  MG --> SBOX[Sandbox]
+  PLATFORM --> CONN[Connectivity Subscription]
+  PLATFORM --> MGMT[Management Subscription]
+  PLATFORM --> IDENT[Identity Subscription]
+  LANDING --> PROD[Production Subscriptions]
+  LANDING --> NONPROD[Non-Production Subscriptions]
+  DC[On-prem / Private Cloud] --> HYBRID[ExpressRoute / VPN]
+  HYBRID --> HUB[Hub VNet / Virtual WAN]
+  CONN --> HUB
+  HUB --> PRODNET[Production Spokes]
+  HUB --> DEVNET[Non-Production Spokes]
+  HUB --> SHARED[Shared Services]
+  MGMT --> OBS[Central Monitoring / Log Analytics]
+  PROD --> OBS
+  NONPROD --> OBS
