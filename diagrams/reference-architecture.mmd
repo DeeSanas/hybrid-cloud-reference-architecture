@@ -1,0 +1,45 @@
+flowchart TB
+    U[Enterprise Users / Applications] --> ID[Central Identity & Access]
+    ID --> ONPREM
+    ID --> CLOUD
+
+    subgraph ONPREM[Enterprise Data Center / Private Cloud]
+      APP1[VM / Bare-metal Workloads]
+      K8S1[Kubernetes / Platform Services]
+      STG[Enterprise Storage]
+      EDGE1[Redundant WAN Edge]
+      APP1 --- K8S1
+      APP1 --- STG
+      K8S1 --- STG
+      APP1 --> EDGE1
+      K8S1 --> EDGE1
+    end
+
+    subgraph TRANSIT[Hybrid Connectivity]
+      VPN[IPsec VPN - baseline]
+      DX[Private Circuit / Cloud Interconnect - optional]
+      BGP[Dynamic Routing / BGP]
+      FW[Segmentation & Inspection]
+      VPN --- BGP
+      DX --- BGP
+      BGP --- FW
+    end
+
+    subgraph CLOUD[Public Cloud Landing Zone]
+      HUB[Transit / Hub Network]
+      PROD[Production Spoke / VPC]
+      NONPROD[Non-Production Spoke / VPC]
+      SHARED[Shared Services]
+      SEC[Security & Logging]
+      HUB --> PROD
+      HUB --> NONPROD
+      HUB --> SHARED
+      HUB --> SEC
+    end
+
+    EDGE1 --> VPN
+    EDGE1 --> DX
+    FW --> HUB
+    OBS[Central Observability / SIEM] --- ONPREM
+    OBS --- CLOUD
+    CICD[GitHub Actions / IaC Pipeline] --> CLOUD
